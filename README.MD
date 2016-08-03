@@ -1,4 +1,4 @@
-#IDRC
+#Implicit Discourse Relation Classification with Pair-Aware Sentence modeling
 
 Our implementation relies on several open-source toolkits such as Tensorflow, Gensim, and Numpy
  
