@@ -14,8 +14,9 @@ for key,value in count_sense.iteritems():
 	print key,value
 print 'total',len(count_sense),total
 
-print count_sense['Temporal.Asynchronous']
-print count_sense['Temporal.Synchrony']
+#print count_sense['Temporal.Asynchronous']
+#print count_sense['Temporal.Synchrony']
+'''
 print count_sense['Contingency.Cause']
 print count_sense['Contingency.Pragmatic cause']
 print count_sense['Contingency.Condition']
@@ -32,6 +33,7 @@ print count_sense['Expansion.Exception']
 print count_sense['Expansion.List']
 
 
+
 another_train_file = 'ano'
 another_train_data = [json.loads(line) for line in open(another_train_file).readlines()]
 idx = 0
@@ -44,5 +46,5 @@ for the,ano in zip(raw_train_data,another_train_data):
 		print 'Y: ',the['Arg1']
 		print 'N: ',ano['Arg1']['RawText']
 		break
-
+'''
 

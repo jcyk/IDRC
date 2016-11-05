@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import json
+import nltk
 
 parser = argparse.ArgumentParser(description='Require the path to pdtb dataset')
 parser.add_argument('inputf', type=str, metavar='', help='')
@@ -76,12 +77,9 @@ def decode_relation(raw_relation):
     finr = []
     for r in relation:
         sr = r.split('.')
-
-        if len(sr) < 2:
-            continue
-        if len(sr) > 2:
-            sr = sr[:2]
-        sr = ".".join(sr).strip()
+        sr = sr[0].strip()
+        #sr = sr[:2]
+        #sr = ".".join(sr).strip()
         finr.append(sr)
     return finr
 
@@ -93,7 +91,7 @@ def find_relation(store_info):
     finr = []
     for relation in store_info[behigh+1:below]:
         finr.extend(decode_relation(relation))
-    return list(set(finr)&selected_sense)
+    return list(set(finr))  #&selected_sense
 
 def process_unit(store_info, fw, is_train):
     if pattern_type.match(store_info[0]):
@@ -123,13 +121,15 @@ def process_unit(store_info, fw, is_train):
             print_instance(relation, finlist, is_train)
 
 def print_instance(relations, finlist, is_train):
-    arg1 = finlist[0].split()
-    arg2 = finlist[1].split()
-    if is_train:
-        for relation in relations:
-                fw.write(json.dumps({'Arg1':arg1,'Arg2':arg2,'Sense':relation})+'\n')
-    else:
-        fw.write(json.dumps({'Arg1':arg1,'Arg2':arg2,'Sense':relations})+'\n')
+    arg1 =  reduce(lambda x,y: x+y, [nltk.word_tokenize(s) for s in nltk.sent_tokenize(finlist[0])])
+    arg2 = reduce(lambda x,y: x+y, [nltk.word_tokenize(s) for s in nltk.sent_tokenize(finlist[1])])
+    if len(relations)>1:
+        return
+    #if is_train:
+    for relation in relations:
+        fw.write(json.dumps({'Arg1':arg1,'Arg2':arg2,'Sense':relation})+'\n')
+    #else:
+    #    fw.write(json.dumps({'Arg1':arg1,'Arg2':arg2,'Sense':relations})+'\n')
     
 
 def find_first_start_at(start, pattern, store_info):
